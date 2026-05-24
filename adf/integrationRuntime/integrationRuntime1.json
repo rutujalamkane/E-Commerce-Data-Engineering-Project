@@ -1,0 +1,12 @@
+{
+	"name": "integrationRuntime1",
+	"properties": {
+		"type": "SelfHosted",
+		"typeProperties": {
+			"linkedInfo": {
+				"resourceId": "/subscriptions/9a025bdc-217d-4895-ba35-402542edf3cf/resourcegroups/RG_FlightBookings_Project5/providers/Microsoft.DataFactory/factories/adf-flightbooking-project5/integrationruntimes/Rutuja-SelfHosted",
+				"authorizationType": "Rbac"
+			}
+		}
+	}
+}
