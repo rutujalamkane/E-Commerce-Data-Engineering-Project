@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "HttpServerLocation",
-				"relativeUrl": "E-Commerce-Data-Engineering-Project/refs/heads/main/product_category_name_translation.csv"
+				"relativeUrl": "E-Commerce-Data-Engineering-Project/refs/heads/main/olist_products_dataset.csv"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",

@@ -1,20 +1,18 @@
 {
-	"name": "DSGitToAdls",
+	"name": "DS_ADLS_Bronze_Products_JSON",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "DataLakeLink",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
-		"type": "Parquet",
+		"type": "Json",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "products",
 				"fileSystem": "bronze"
-			},
-			"compressionCodec": "snappy"
+			}
 		},
-		"schema": []
+		"schema": {}
 	}
 }
