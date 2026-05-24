@@ -1,0 +1,15 @@
+{
+	"name": "adf-olist-ecommerce",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Enabled",
+			"editable": true
+		}
+	},
+	"location": "australiaeast",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "bb1b3daf-17d4-4a31-90e0-7b4a1188355a",
+		"tenantId": "6fdfba89-2eb8-453a-8357-1660b4d9ee7e"
+	}
+}
