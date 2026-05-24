@@ -1,0 +1,6 @@
+.env
+*.csv
+*.parquet
+*.json
+*.pyc
+secrets/
