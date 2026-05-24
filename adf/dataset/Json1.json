@@ -1,0 +1,28 @@
+{
+	"name": "Json1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "FiletoAzSql",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "FileServerLocation",
+				"fileName": "file_name.json"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"file_name": {
+					"type": "string"
+				},
+				"target_name": {
+					"type": "string"
+				}
+			}
+		}
+	}
+}
