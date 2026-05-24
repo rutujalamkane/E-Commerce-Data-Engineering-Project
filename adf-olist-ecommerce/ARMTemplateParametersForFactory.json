@@ -1,0 +1,33 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adf-olist-ecommerce"
+		},
+		"AzureSqlDatabase1_password": {
+			"value": ""
+		},
+		"FiletoAzSql_password": {
+			"value": ""
+		},
+		"AzureSqlDatabase1_properties_typeProperties_server": {
+			"value": "olist-ecommerce-sqlserver.database.windows.net"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_database": {
+			"value": "olist_ecommerce_db"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_userName": {
+			"value": "rutuja-admin"
+		},
+		"FiletoAzSql_properties_typeProperties_host": {
+			"value": "C:\\Users\\Admin\\OneDrive\\Documents\\Data Engineer Study\\Projects\\complete project 1\\E-Commerce-Data-Engineering-Project\\datasets"
+		},
+		"FiletoAzSql_properties_typeProperties_userId": {
+			"value": "admin"
+		},
+		"integrationRuntime1_properties_typeProperties_linkedInfo_resourceId": {
+			"value": "/subscriptions/9a025bdc-217d-4895-ba35-402542edf3cf/resourcegroups/RG_FlightBookings_Project5/providers/Microsoft.DataFactory/factories/adf-flightbooking-project5/integrationruntimes/Rutuja-SelfHosted"
+		}
+	}
+}
