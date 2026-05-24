@@ -1,0 +1,20 @@
+{
+	"name": "DSGeolocationSink",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DataLakeLink",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "geolocation",
+				"fileSystem": "bronze"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}

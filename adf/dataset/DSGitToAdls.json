@@ -1,0 +1,20 @@
+{
+	"name": "DSGitToAdls",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DataLakeLink",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "product_category_name_translation",
+				"fileSystem": "bronze"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}
