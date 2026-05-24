@@ -47,6 +47,10 @@
 			"type": "string",
 			"defaultValue": "https://raw.githubusercontent.com/rutujalamkane/"
 		},
+		"LS_REST_Product_API_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "http://10.53.40.142:8000/"
+		},
 		"integrationRuntime1_properties_typeProperties_linkedInfo_resourceId": {
 			"type": "string",
 			"defaultValue": "/subscriptions/9a025bdc-217d-4895-ba35-402542edf3cf/resourcegroups/RG_FlightBookings_Project5/providers/Microsoft.DataFactory/factories/adf-flightbooking-project5/integrationruntimes/Rutuja-SelfHosted"
@@ -110,6 +114,9 @@
 					},
 					"FiletoAzSql_properties_typeProperties_userId": {
 						"value": "[parameters('FiletoAzSql_properties_typeProperties_userId')]"
+					},
+					"LS_REST_Product_API_properties_typeProperties_url": {
+						"value": "[parameters('LS_REST_Product_API_properties_typeProperties_url')]"
 					}
 				}
 			},
