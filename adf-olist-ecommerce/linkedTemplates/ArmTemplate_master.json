@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'AzureSqlDatabase1'"
 		},
+		"DataLakeLink_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'DataLakeLink'"
+		},
 		"FiletoAzSql_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'FiletoAzSql'"
@@ -27,6 +31,10 @@
 			"type": "string",
 			"defaultValue": "rutuja-admin"
 		},
+		"DataLakeLink_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://olistecommercesc.dfs.core.windows.net/"
+		},
 		"FiletoAzSql_properties_typeProperties_host": {
 			"type": "string",
 			"defaultValue": "C:\\Users\\Admin\\OneDrive\\Documents\\Data Engineer Study\\Projects\\complete project 1\\E-Commerce-Data-Engineering-Project"
@@ -34,6 +42,10 @@
 		"FiletoAzSql_properties_typeProperties_userId": {
 			"type": "string",
 			"defaultValue": "admin"
+		},
+		"Gitlink_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://raw.githubusercontent.com/rutujalamkane/"
 		},
 		"integrationRuntime1_properties_typeProperties_linkedInfo_resourceId": {
 			"type": "string",
@@ -69,6 +81,9 @@
 					"AzureSqlDatabase1_password": {
 						"value": "[parameters('AzureSqlDatabase1_password')]"
 					},
+					"DataLakeLink_accountKey": {
+						"value": "[parameters('DataLakeLink_accountKey')]"
+					},
 					"FiletoAzSql_password": {
 						"value": "[parameters('FiletoAzSql_password')]"
 					},
@@ -80,6 +95,12 @@
 					},
 					"AzureSqlDatabase1_properties_typeProperties_userName": {
 						"value": "[parameters('AzureSqlDatabase1_properties_typeProperties_userName')]"
+					},
+					"DataLakeLink_properties_typeProperties_url": {
+						"value": "[parameters('DataLakeLink_properties_typeProperties_url')]"
+					},
+					"Gitlink_properties_typeProperties_url": {
+						"value": "[parameters('Gitlink_properties_typeProperties_url')]"
 					},
 					"integrationRuntime1_properties_typeProperties_linkedInfo_resourceId": {
 						"value": "[parameters('integrationRuntime1_properties_typeProperties_linkedInfo_resourceId')]"
