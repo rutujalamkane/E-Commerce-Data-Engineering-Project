@@ -29,7 +29,7 @@
 		},
 		"FiletoAzSql_properties_typeProperties_host": {
 			"type": "string",
-			"defaultValue": "C:\\Users\\Admin\\OneDrive\\Documents\\Data Engineer Study\\Projects\\complete project 1\\E-Commerce-Data-Engineering-Project\\datasets"
+			"defaultValue": "C:\\Users\\Admin\\OneDrive\\Documents\\Data Engineer Study\\Projects\\complete project 1\\E-Commerce-Data-Engineering-Project"
 		},
 		"FiletoAzSql_properties_typeProperties_userId": {
 			"type": "string",
