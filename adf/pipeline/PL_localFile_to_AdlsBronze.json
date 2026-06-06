@@ -1,0 +1,108 @@
+{
+	"name": "PL_localFile_to_AdlsBronze",
+	"properties": {
+		"activities": [
+			{
+				"name": "ForEachFile",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.p_file_name",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Copy-localFile-to-AdlsBronze",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "DelimitedTextSource",
+									"storeSettings": {
+										"type": "FileServerReadSettings",
+										"recursive": true,
+										"enablePartitionDiscovery": false
+									},
+									"formatSettings": {
+										"type": "DelimitedTextReadSettings"
+									}
+								},
+								"sink": {
+									"type": "DelimitedTextSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSettings",
+										"quoteAllText": true,
+										"fileExtension": ".txt"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "LocalCsvDS",
+									"type": "DatasetReference",
+									"parameters": {
+										"p_file_name": {
+											"value": "@item().file_name",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DSLocalCsvToAdls",
+									"type": "DatasetReference",
+									"parameters": {
+										"p_filename": {
+											"value": "@item().target_name",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"p_file_name": {
+				"type": "array",
+				"defaultValue": [
+					{
+						"file_name": "olist_customers_dataset.csv",
+						"target_name": "customers.csv"
+					},
+					{
+						"file_name": "olist_sellers_dataset.csv",
+						"target_name": "sellers.csv"
+					}
+				]
+			}
+		},
+		"annotations": []
+	}
+}
