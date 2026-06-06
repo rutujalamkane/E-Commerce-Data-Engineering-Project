@@ -5,6 +5,24 @@
 		"factoryName": {
 			"value": "adf-olist-ecommerce"
 		},
+		"LS_localFile_password": {
+			"value": ""
+		},
+		"LS_toAdlsBronze_accountKey": {
+			"value": ""
+		},
+		"LS_localFile_properties_typeProperties_host": {
+			"value": "C:\\Users\\Admin\\OneDrive\\Documents\\Data Engineer Study\\Projects\\complete project 1\\E-Commerce-Data-Engineering-Project\\datasets"
+		},
+		"LS_localFile_properties_typeProperties_userId": {
+			"value": "admin"
+		},
+		"LS_toAdlsBronze_properties_typeProperties_url": {
+			"value": "https://olistecommercesc.dfs.core.windows.net/"
+		},
+		"LS_toGit_properties_typeProperties_url": {
+			"value": "https://raw.githubusercontent.com/rutujalamkane/"
+		},
 		"integrationRuntime1_properties_typeProperties_linkedInfo_resourceId": {
 			"value": "/subscriptions/9a025bdc-217d-4895-ba35-402542edf3cf/resourcegroups/RG_FlightBookings_Project5/providers/Microsoft.DataFactory/factories/adf-flightbooking-project5/integrationruntimes/Rutuja-SelfHosted"
 		},

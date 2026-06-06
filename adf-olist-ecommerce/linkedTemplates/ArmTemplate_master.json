@@ -7,6 +7,30 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "adf-olist-ecommerce"
 		},
+		"LS_localFile_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'LS_localFile'"
+		},
+		"LS_toAdlsBronze_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'LS_toAdlsBronze'"
+		},
+		"LS_localFile_properties_typeProperties_host": {
+			"type": "string",
+			"defaultValue": "C:\\Users\\Admin\\OneDrive\\Documents\\Data Engineer Study\\Projects\\complete project 1\\E-Commerce-Data-Engineering-Project\\datasets"
+		},
+		"LS_localFile_properties_typeProperties_userId": {
+			"type": "string",
+			"defaultValue": "admin"
+		},
+		"LS_toAdlsBronze_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://olistecommercesc.dfs.core.windows.net/"
+		},
+		"LS_toGit_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://raw.githubusercontent.com/rutujalamkane/"
+		},
 		"integrationRuntime1_properties_typeProperties_linkedInfo_resourceId": {
 			"type": "string",
 			"defaultValue": "/subscriptions/9a025bdc-217d-4895-ba35-402542edf3cf/resourcegroups/RG_FlightBookings_Project5/providers/Microsoft.DataFactory/factories/adf-flightbooking-project5/integrationruntimes/Rutuja-SelfHosted"
@@ -38,8 +62,26 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
+					"LS_toAdlsBronze_accountKey": {
+						"value": "[parameters('LS_toAdlsBronze_accountKey')]"
+					},
+					"LS_localFile_password": {
+						"value": "[parameters('LS_localFile_password')]"
+					},
+					"LS_toAdlsBronze_properties_typeProperties_url": {
+						"value": "[parameters('LS_toAdlsBronze_properties_typeProperties_url')]"
+					},
+					"LS_toGit_properties_typeProperties_url": {
+						"value": "[parameters('LS_toGit_properties_typeProperties_url')]"
+					},
 					"integrationRuntime1_properties_typeProperties_linkedInfo_resourceId": {
 						"value": "[parameters('integrationRuntime1_properties_typeProperties_linkedInfo_resourceId')]"
+					},
+					"LS_localFile_properties_typeProperties_host": {
+						"value": "[parameters('LS_localFile_properties_typeProperties_host')]"
+					},
+					"LS_localFile_properties_typeProperties_userId": {
+						"value": "[parameters('LS_localFile_properties_typeProperties_userId')]"
 					}
 				}
 			},
