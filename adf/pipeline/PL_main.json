@@ -1,0 +1,129 @@
+{
+	"name": "PL_main",
+	"properties": {
+		"activities": [
+			{
+				"name": "exe-local-bronze",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "PL_localFile_to_AdlsBronze",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"p_file_name": {
+							"value": "@pipeline().parameters.p_file_name",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "exe-raw-to-bronze",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "exe-local-bronze",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "PL_adlsRaw_to_adlsBronze",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"p_filename": {
+							"value": "@pipeline().parameters.p_filename",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "exe-git-to-bronze",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "exe-raw-to-bronze",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "PL_git_to_adlsBronze",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"p_filename": {
+							"value": "@pipeline().parameters.p_filename_git",
+							"type": "Expression"
+						}
+					}
+				}
+			}
+		],
+		"parameters": {
+			"p_file_name": {
+				"type": "array",
+				"defaultValue": [
+					{
+						"file_name": "olist_customers_dataset.csv",
+						"target_name": "customers.csv"
+					},
+					{
+						"file_name": "olist_sellers_dataset.csv",
+						"target_name": "sellers.csv"
+					}
+				]
+			},
+			"p_filename": {
+				"type": "array",
+				"defaultValue": [
+					{
+						"file_name": "olist_geolocation_dataset.csv",
+						"target_name": "geolocation.csv"
+					},
+					{
+						"file_name": "olist_order_reviews_dataset.csv",
+						"target_name": "order_reviews.csv"
+					}
+				]
+			},
+			"p_filename_git": {
+				"type": "array",
+				"defaultValue": [
+					{
+						"target_name": "products.csv",
+						"file_path": "E-Commerce-Data-Engineering-Project/refs/heads/main/datasets/olist_products_dataset.csv"
+					},
+					{
+						"target_name": "product_category_name_translation.csv",
+						"file_path": "E-Commerce-Data-Engineering-Project/refs/heads/main/datasets/product_category_name_translation.csv"
+					}
+				]
+			}
+		},
+		"annotations": []
+	}
+}

@@ -1,0 +1,30 @@
+{
+	"name": "DSCsvFiles_Git",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_toGit",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"p_file_path": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation",
+				"relativeUrl": {
+					"value": "@dataset().p_file_path",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}

@@ -1,0 +1,107 @@
+{
+	"name": "PL_git_to_adlsBronze",
+	"properties": {
+		"activities": [
+			{
+				"name": "ForEachGitFile",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.p_filename",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "copy-git-to-bronze",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "DelimitedTextSource",
+									"storeSettings": {
+										"type": "HttpReadSettings",
+										"requestMethod": "GET"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextReadSettings"
+									}
+								},
+								"sink": {
+									"type": "DelimitedTextSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSettings",
+										"quoteAllText": true,
+										"fileExtension": ".txt"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "DSCsvFiles_Git",
+									"type": "DatasetReference",
+									"parameters": {
+										"p_file_path": {
+											"value": "@item().file_path",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DSLocalCsvToAdls",
+									"type": "DatasetReference",
+									"parameters": {
+										"p_filename": {
+											"value": "@item().target_name",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"p_filename": {
+				"type": "array",
+				"defaultValue": [
+					{
+						"target_name": "products.csv",
+						"file_path": "E-Commerce-Data-Engineering-Project/refs/heads/main/datasets/olist_products_dataset.csv"
+					},
+					{
+						"target_name": "product_category_name_translation.csv",
+						"file_path": "E-Commerce-Data-Engineering-Project/refs/heads/main/datasets/product_category_name_translation.csv"
+					}
+				]
+			}
+		},
+		"annotations": []
+	}
+}
