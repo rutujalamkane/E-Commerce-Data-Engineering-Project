@@ -7,50 +7,6 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "adf-olist-ecommerce"
 		},
-		"AzureSqlDatabase1_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'AzureSqlDatabase1'"
-		},
-		"DataLakeLink_accountKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'DataLakeLink'"
-		},
-		"FiletoAzSql_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'FiletoAzSql'"
-		},
-		"AzureSqlDatabase1_properties_typeProperties_server": {
-			"type": "string",
-			"defaultValue": "olist-ecommerce-sqlserver.database.windows.net"
-		},
-		"AzureSqlDatabase1_properties_typeProperties_database": {
-			"type": "string",
-			"defaultValue": "olist_ecommerce_db"
-		},
-		"AzureSqlDatabase1_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "rutuja-admin"
-		},
-		"DataLakeLink_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://olistecommercesc.dfs.core.windows.net/"
-		},
-		"FiletoAzSql_properties_typeProperties_host": {
-			"type": "string",
-			"defaultValue": "C:\\Users\\Admin\\OneDrive\\Documents\\Data Engineer Study\\Projects\\complete project 1\\E-Commerce-Data-Engineering-Project"
-		},
-		"FiletoAzSql_properties_typeProperties_userId": {
-			"type": "string",
-			"defaultValue": "admin"
-		},
-		"Gitlink_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://raw.githubusercontent.com/rutujalamkane/"
-		},
-		"LS_REST_Product_API_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "http://10.53.40.142:8000/"
-		},
 		"integrationRuntime1_properties_typeProperties_linkedInfo_resourceId": {
 			"type": "string",
 			"defaultValue": "/subscriptions/9a025bdc-217d-4895-ba35-402542edf3cf/resourcegroups/RG_FlightBookings_Project5/providers/Microsoft.DataFactory/factories/adf-flightbooking-project5/integrationruntimes/Rutuja-SelfHosted"
@@ -82,41 +38,8 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
-					"AzureSqlDatabase1_password": {
-						"value": "[parameters('AzureSqlDatabase1_password')]"
-					},
-					"DataLakeLink_accountKey": {
-						"value": "[parameters('DataLakeLink_accountKey')]"
-					},
-					"FiletoAzSql_password": {
-						"value": "[parameters('FiletoAzSql_password')]"
-					},
-					"AzureSqlDatabase1_properties_typeProperties_server": {
-						"value": "[parameters('AzureSqlDatabase1_properties_typeProperties_server')]"
-					},
-					"AzureSqlDatabase1_properties_typeProperties_database": {
-						"value": "[parameters('AzureSqlDatabase1_properties_typeProperties_database')]"
-					},
-					"AzureSqlDatabase1_properties_typeProperties_userName": {
-						"value": "[parameters('AzureSqlDatabase1_properties_typeProperties_userName')]"
-					},
-					"DataLakeLink_properties_typeProperties_url": {
-						"value": "[parameters('DataLakeLink_properties_typeProperties_url')]"
-					},
-					"Gitlink_properties_typeProperties_url": {
-						"value": "[parameters('Gitlink_properties_typeProperties_url')]"
-					},
 					"integrationRuntime1_properties_typeProperties_linkedInfo_resourceId": {
 						"value": "[parameters('integrationRuntime1_properties_typeProperties_linkedInfo_resourceId')]"
-					},
-					"FiletoAzSql_properties_typeProperties_host": {
-						"value": "[parameters('FiletoAzSql_properties_typeProperties_host')]"
-					},
-					"FiletoAzSql_properties_typeProperties_userId": {
-						"value": "[parameters('FiletoAzSql_properties_typeProperties_userId')]"
-					},
-					"LS_REST_Product_API_properties_typeProperties_url": {
-						"value": "[parameters('LS_REST_Product_API_properties_typeProperties_url')]"
 					}
 				}
 			},
