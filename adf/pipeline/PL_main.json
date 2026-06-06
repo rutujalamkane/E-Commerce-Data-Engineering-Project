@@ -81,6 +81,29 @@
 						}
 					}
 				}
+			},
+			{
+				"name": "exe-sql-to-bronze",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "exe-git-to-bronze",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "PL_azureSqlDb_to_bronze",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
 			}
 		],
 		"parameters": {

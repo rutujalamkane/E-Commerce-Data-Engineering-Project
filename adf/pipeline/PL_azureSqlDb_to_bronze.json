@@ -50,7 +50,7 @@
 					"source": {
 						"type": "AzureSqlSource",
 						"sqlReaderQuery": {
-							"value": "@select * from dbo.orders\nwhere order_purchase_timestamp > @{activity('LK_Get_Watermark').output.firstRow.watermark_value}",
+							"value": "@concat(\n'SELECT * FROM dbo.orders WHERE order_purchase_timestamp > ''',\nactivity('LK_Get_Watermark').output.firstRow.watermark_value,\n''''\n)",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00",
@@ -86,7 +86,10 @@
 				"outputs": [
 					{
 						"referenceName": "DSAzureDb_to_Adls",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"p_filename": "orders.csv"
+						}
 					}
 				]
 			},
@@ -113,7 +116,7 @@
 					"source": {
 						"type": "AzureSqlSource",
 						"sqlReaderQuery": {
-							"value": "select oi.*\nfrom dbo.order_items oi \njoin dbo.orders o\non oi.order_id = o.order_id\nwhere order_purchase_timestamp > @{activity('LK_Get_Watermark').output.firstRow.watermark_value}",
+							"value": "@concat(\n'SELECT oi.* FROM dbo.order_items oi \nJOIN dbo.orders o ON oi.order_id = o.order_id \nWHERE o.order_purchase_timestamp > ''',\nactivity('LK_Get_Watermark').output.firstRow.watermark_value,\n''''\n)",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00",
@@ -149,7 +152,10 @@
 				"outputs": [
 					{
 						"referenceName": "DSAzureDb_to_Adls",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"p_filename": "order_items.csv"
+						}
 					}
 				]
 			},
@@ -176,7 +182,7 @@
 					"source": {
 						"type": "AzureSqlSource",
 						"sqlReaderQuery": {
-							"value": "select op.*\nfrom dbo.order_payment op\njoin dbo.orders o\non op.order_id = o.order_id\nwhere order_purchase_timestamp > @{activity('LK_Get_Watermark').output.firstRow.watermark_value}",
+							"value": "@concat(\n'SELECT op.* FROM dbo.order_payments op \nJOIN dbo.orders o ON op.order_id = o.order_id \nWHERE o.order_purchase_timestamp > ''',\nactivity('LK_Get_Watermark').output.firstRow.watermark_value,\n''''\n)",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00",
@@ -212,7 +218,10 @@
 				"outputs": [
 					{
 						"referenceName": "DSAzureDb_to_Adls",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"p_filename": "order_payments.csv"
+						}
 					}
 				]
 			},
