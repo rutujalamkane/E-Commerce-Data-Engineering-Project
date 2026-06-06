@@ -15,6 +15,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_toAdlsBronze'"
 		},
+		"LS_toAzureSqlDb_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'LS_toAzureSqlDb'"
+		},
 		"LS_localFile_properties_typeProperties_host": {
 			"type": "string",
 			"defaultValue": "C:\\Users\\Admin\\OneDrive\\Documents\\Data Engineer Study\\Projects\\complete project 1\\E-Commerce-Data-Engineering-Project\\datasets"
@@ -34,6 +38,18 @@
 		"integrationRuntime1_properties_typeProperties_linkedInfo_resourceId": {
 			"type": "string",
 			"defaultValue": "/subscriptions/9a025bdc-217d-4895-ba35-402542edf3cf/resourcegroups/RG_FlightBookings_Project5/providers/Microsoft.DataFactory/factories/adf-flightbooking-project5/integrationruntimes/Rutuja-SelfHosted"
+		},
+		"LS_toAzureSqlDb_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "olist-ecommerce-sqlserver.database.windows.net"
+		},
+		"LS_toAzureSqlDb_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "olist_ecommerce_db"
+		},
+		"LS_toAzureSqlDb_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "rutuja-admin"
 		}
 	},
 	"variables": {
@@ -475,6 +491,30 @@
 								}
 							}
 						}
+					},
+					{
+						"name": "exe-sql-to-bronze",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "exe-git-to-bronze",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "PL_azureSqlDb_to_bronze",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
 					}
 				],
 				"policy": {
@@ -526,7 +566,8 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/PL_localFile_to_AdlsBronze')]",
 				"[concat(variables('factoryId'), '/pipelines/PL_adlsRaw_to_adlsBronze')]",
-				"[concat(variables('factoryId'), '/pipelines/PL_git_to_adlsBronze')]"
+				"[concat(variables('factoryId'), '/pipelines/PL_git_to_adlsBronze')]",
+				"[concat(variables('factoryId'), '/pipelines/PL_azureSqlDb_to_bronze')]"
 			]
 		},
 		{
@@ -762,6 +803,384 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_toAzureSqlDb')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"server": "[parameters('LS_toAzureSqlDb_properties_typeProperties_server')]",
+					"database": "[parameters('LS_toAzureSqlDb_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": false,
+					"authenticationType": "SQL",
+					"userName": "[parameters('LS_toAzureSqlDb_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('LS_toAzureSqlDb_password')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_azureSqlDb_to_bronze')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "LK_Get_Watermark",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "SELECT watermark_value\nFROM dbo.watermark_control\nWHERE table_name = 'orders';",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "DS_AzureSQL",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "CP_Orders_To_Bronze",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "LK_Get_Watermark",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": {
+									"value": "@concat(\n'SELECT * FROM dbo.orders WHERE order_purchase_timestamp > ''',\nactivity('LK_Get_Watermark').output.firstRow.watermark_value,\n''''\n)",
+									"type": "Expression"
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "DS_AzureSQL",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DSAzureDb_to_Adls",
+								"type": "DatasetReference",
+								"parameters": {
+									"p_filename": "orders.csv"
+								}
+							}
+						]
+					},
+					{
+						"name": "CP_OrderItems_To_Bronze",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "CP_Orders_To_Bronze",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": {
+									"value": "@concat(\n'SELECT oi.* FROM dbo.order_items oi \nJOIN dbo.orders o ON oi.order_id = o.order_id \nWHERE o.order_purchase_timestamp > ''',\nactivity('LK_Get_Watermark').output.firstRow.watermark_value,\n''''\n)",
+									"type": "Expression"
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "DS_AzureSQL",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DSAzureDb_to_Adls",
+								"type": "DatasetReference",
+								"parameters": {
+									"p_filename": "order_items.csv"
+								}
+							}
+						]
+					},
+					{
+						"name": "CP_OrderPayments_To_Bronze",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "CP_Orders_To_Bronze",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": {
+									"value": "@concat(\n'SELECT op.* FROM dbo.order_payments op \nJOIN dbo.orders o ON op.order_id = o.order_id \nWHERE o.order_purchase_timestamp > ''',\nactivity('LK_Get_Watermark').output.firstRow.watermark_value,\n''''\n)",
+									"type": "Expression"
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "DS_AzureSQL",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DSAzureDb_to_Adls",
+								"type": "DatasetReference",
+								"parameters": {
+									"p_filename": "order_payments.csv"
+								}
+							}
+						]
+					},
+					{
+						"name": "SC_Update_Watermark",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "CP_OrderItems_To_Bronze",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "CP_OrderPayments_To_Bronze",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[sp_update_watermark]"
+						},
+						"linkedServiceName": {
+							"referenceName": "LS_toAzureSqlDb",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_AzureSQL')]",
+				"[concat(variables('factoryId'), '/datasets/DSAzureDb_to_Adls')]",
+				"[concat(variables('factoryId'), '/linkedServices/LS_toAzureSqlDb')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_AzureSQL')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_toAzureSqlDb",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "orders"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_toAzureSqlDb')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DSAzureDb_to_Adls')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_toAdlsBronze",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"p_filename": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@dataset().p_filename",
+							"type": "Expression"
+						},
+						"fileSystem": "bronze"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "customer_id",
+						"type": "String"
+					},
+					{
+						"name": "customer_unique_id",
+						"type": "String"
+					},
+					{
+						"name": "customer_zip_code_prefix",
+						"type": "String"
+					},
+					{
+						"name": "customer_city",
+						"type": "String"
+					},
+					{
+						"name": "customer_state",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_toAdlsBronze')]"
+			]
 		}
 	]
 }

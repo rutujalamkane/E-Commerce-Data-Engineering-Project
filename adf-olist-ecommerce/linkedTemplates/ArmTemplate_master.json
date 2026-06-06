@@ -15,6 +15,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_toAdlsBronze'"
 		},
+		"LS_toAzureSqlDb_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'LS_toAzureSqlDb'"
+		},
 		"LS_localFile_properties_typeProperties_host": {
 			"type": "string",
 			"defaultValue": "C:\\Users\\Admin\\OneDrive\\Documents\\Data Engineer Study\\Projects\\complete project 1\\E-Commerce-Data-Engineering-Project\\datasets"
@@ -34,6 +38,18 @@
 		"integrationRuntime1_properties_typeProperties_linkedInfo_resourceId": {
 			"type": "string",
 			"defaultValue": "/subscriptions/9a025bdc-217d-4895-ba35-402542edf3cf/resourcegroups/RG_FlightBookings_Project5/providers/Microsoft.DataFactory/factories/adf-flightbooking-project5/integrationruntimes/Rutuja-SelfHosted"
+		},
+		"LS_toAzureSqlDb_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "olist-ecommerce-sqlserver.database.windows.net"
+		},
+		"LS_toAzureSqlDb_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "olist_ecommerce_db"
+		},
+		"LS_toAzureSqlDb_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "rutuja-admin"
 		},
 		"containerUri": {
 			"type": "string",
@@ -65,6 +81,9 @@
 					"LS_toAdlsBronze_accountKey": {
 						"value": "[parameters('LS_toAdlsBronze_accountKey')]"
 					},
+					"LS_toAzureSqlDb_password": {
+						"value": "[parameters('LS_toAzureSqlDb_password')]"
+					},
 					"LS_localFile_password": {
 						"value": "[parameters('LS_localFile_password')]"
 					},
@@ -76,6 +95,15 @@
 					},
 					"integrationRuntime1_properties_typeProperties_linkedInfo_resourceId": {
 						"value": "[parameters('integrationRuntime1_properties_typeProperties_linkedInfo_resourceId')]"
+					},
+					"LS_toAzureSqlDb_properties_typeProperties_server": {
+						"value": "[parameters('LS_toAzureSqlDb_properties_typeProperties_server')]"
+					},
+					"LS_toAzureSqlDb_properties_typeProperties_database": {
+						"value": "[parameters('LS_toAzureSqlDb_properties_typeProperties_database')]"
+					},
+					"LS_toAzureSqlDb_properties_typeProperties_userName": {
+						"value": "[parameters('LS_toAzureSqlDb_properties_typeProperties_userName')]"
 					},
 					"LS_localFile_properties_typeProperties_host": {
 						"value": "[parameters('LS_localFile_properties_typeProperties_host')]"
